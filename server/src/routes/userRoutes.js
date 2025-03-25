@@ -1,21 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const { validateRegister, validateLogin } = require('../middleware/validators');
 const auth = require('../middleware/auth');
 
-// @route   POST api/users/register
-// @desc    Đăng ký người dùng
-// @access  Public
-router.post('/register', userController.register);
+// Register a new user
+router.post('/register', validateRegister, userController.register);
 
-// @route   POST api/users/login
-// @desc    Đăng nhập & lấy token
-// @access  Public
-router.post('/login', userController.login);
+// Login user
+router.post('/login', validateLogin, userController.login);
 
-// @route   GET api/users/me
-// @desc    Lấy thông tin người dùng hiện tại
-// @access  Private
-router.get('/me', auth, userController.getUserProfile);
+// Get current user
+router.get('/me', auth, userController.getCurrentUser);
 
 module.exports = router;

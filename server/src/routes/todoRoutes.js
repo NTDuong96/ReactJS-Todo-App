@@ -1,34 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/todoController');
+const { validateTodo } = require('../middleware/validators');
 const auth = require('../middleware/auth');
 
-// Bảo vệ tất cả các routes với middleware auth
+// Apply auth middleware to all todo routes
 router.use(auth);
 
-// @route   GET api/todos
-// @desc    Lấy tất cả todos
-// @access  Private
-router.get('/', todoController.getTodos);
+// Get all todos
+router.get('/', todoController.getAllTodos);
 
-// @route   GET api/todos/:id
-// @desc    Lấy một todo theo id
-// @access  Private
-router.get('/:id', todoController.getTodoById);
+// Create a new todo
+router.post('/', validateTodo, todoController.createTodo);
 
-// @route   POST api/todos
-// @desc    Tạo todo mới
-// @access  Private
-router.post('/', todoController.createTodo);
+// Update a todo
+router.put('/:id', validateTodo, todoController.updateTodo);
 
-// @route   PUT api/todos/:id
-// @desc    Cập nhật todo
-// @access  Private
-router.put('/:id', todoController.updateTodo);
-
-// @route   DELETE api/todos/:id
-// @desc    Xóa todo
-// @access  Private
+// Delete a todo
 router.delete('/:id', todoController.deleteTodo);
 
 module.exports = router;
